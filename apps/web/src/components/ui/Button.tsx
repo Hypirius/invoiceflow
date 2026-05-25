@@ -1,8 +1,6 @@
 import { ReactNode, ComponentPropsWithoutRef } from "react";
-import { JetBrains_Mono } from "next/font/google";
 import { cn } from "../../utils/cn";
-
-const jetBrainsMono = JetBrains_Mono({ subsets: ["latin"] });
+import { jetBrainsMono } from "../../fonts/jetbrains-mono";
 
 interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
   variant: "primary" | "inverted" | "secondary" | "outlined";

@@ -1,7 +1,5 @@
 import "./globals.css";
-import { Geist } from "next/font/google";
-
-const geist = Geist({ subsets: ["latin"] });
+import { geist } from "../fonts/geist";
 
 export default function RootLayout({
   children,
