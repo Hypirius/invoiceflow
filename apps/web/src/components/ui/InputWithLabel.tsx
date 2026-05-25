@@ -3,9 +3,9 @@ import Input from "./Input";
 import { ComponentProps } from "react";
 
 type InputWithLabelProps = ComponentProps<typeof Input> & {
-  labelText: string;
-  labelClassName: string;
-  className: string;
+  labelText?: string;
+  labelClassName?: string;
+  className?: string;
 };
 
 export default function InputWithLabel({
