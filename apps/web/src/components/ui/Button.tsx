@@ -7,22 +7,14 @@ const jetBrainsMono = JetBrains_Mono({ subsets: ["latin"] });
 interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
   variant: "primary" | "inverted" | "secondary" | "outlined";
   children: ReactNode;
-  height?: string;
-  width?: string;
   className?: string;
 }
 
-export default function Button({
-  variant,
-  children,
-  height = "100",
-  width = "50",
-  className,
-}: ButtonProps) {
+export default function Button({ variant, children, className }: ButtonProps) {
   return (
     <button
       className={cn(
-        `${jetBrainsMono.className} ${height} ${width}`,
+        `${jetBrainsMono.className} h-50 w-80`,
         {
           "bg-[#4F46E5] text-[#F8FAFC]": variant === "primary",
           "bg-[#0F172A] text-[#F8FAFC]": variant === "inverted",
