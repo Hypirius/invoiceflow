@@ -8,7 +8,12 @@ interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
   className?: string;
 }
 
-export default function Button({ variant, children, className }: ButtonProps) {
+export default function Button({
+  variant,
+  children,
+  className,
+  ...rest
+}: ButtonProps) {
   return (
     <button
       className={cn(
@@ -22,6 +27,7 @@ export default function Button({ variant, children, className }: ButtonProps) {
         },
         className,
       )}
+      {...rest}
     >
       {children}
     </button>
