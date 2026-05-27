@@ -9,7 +9,7 @@
     "strictNullChecks": true,
     "paths": {
       "@/*": ["./src/*"],
-      "public": ["./public/*"]
+      "public/*": ["./public/*"]
     }
   },
   "include": [
