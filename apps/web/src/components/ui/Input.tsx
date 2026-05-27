@@ -6,5 +6,10 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
 };
 
 export default function Input({ className, ...rest }: InputProps) {
-  return <input className={cn("w-80 h-40", className)} {...rest} />;
+  return (
+    <input
+      className={cn("w-80 h-40 border border-[#C7C4D8]", className)}
+      {...rest}
+    />
+  );
 }
