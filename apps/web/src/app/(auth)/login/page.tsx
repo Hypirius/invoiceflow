@@ -1,17 +1,24 @@
 import Divider from "@/components/shared/Divider";
-import GoogleOAuthButton from "@/components/shared/GoogleOAuthButton";
-import LoginHeader from "@/features/auth/login/components/LoginHeader";
+import GoogleOAuthButton from "@/features/auth/components/GoogleOAuthButton";
 import LoginForm from "@/features/auth/login/components/LoginForm";
-import SignUpRedirect from "@/features/auth/login/components/SignUpRedirect";
+import AuthRedirect from "@/features/auth/components/AuthRedirect";
+import AuthPageHeader from "@/features/auth/components/AuthPageHeader";
 
 export default function LoginMenu() {
   return (
     <>
-      <LoginHeader />
+      <AuthPageHeader
+        headText="Log in"
+        subText="Welcome back. Please enter your details"
+      />
       <GoogleOAuthButton />
       <Divider text="or" />
       <LoginForm />
-      <SignUpRedirect />
+      <AuthRedirect
+        prompt="Don't have an account?"
+        href="/sign-up"
+        linkText="Sign for access"
+      />
     </>
   );
 }
