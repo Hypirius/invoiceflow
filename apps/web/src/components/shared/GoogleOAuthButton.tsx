@@ -1,7 +1,7 @@
 import Button from "@/components/ui/Button";
 import GoogleLogo from "public/google-icon-logo.svg";
 
-export default function GoogleLogin() {
+export default function GoogleOAuthButton() {
   return (
     <Button
       variant="outlined"
