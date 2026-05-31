@@ -16,6 +16,7 @@ const configSchema = z.object({
   ROOT_FOLDER_PATH: z.string(),
   PORT: z.number().default(5000),
   DATABASE_URL: z.string(),
+  CLIENT_URL: z.url(),
 });
 
 const config = configSchema.parse({
@@ -23,6 +24,7 @@ const config = configSchema.parse({
   ROOT_FOLDER_PATH: pathToEnv,
   PORT: Number(process.env.PORT),
   DATABASE_URL: process.env.DATABASE_URL,
+  CLIENT_URL: process.env.CLIENT_URL,
 });
 
 export default config;
