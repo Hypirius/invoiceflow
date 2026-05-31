@@ -5,7 +5,11 @@
     "rootDir": "src",
     "paths": {
       "@/*": ["./src"]
-    }
+    },
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "allowImportingTsExtensions": true
   },
   "exclude": ["node_modules"]
 }
