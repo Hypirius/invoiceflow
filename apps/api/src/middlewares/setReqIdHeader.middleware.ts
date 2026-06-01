@@ -3,9 +3,9 @@ import { randomUUID } from "crypto";
 
 function setRequestIdHeader() {
   return (req: Request, res: Response, next: NextFunction) => {
-    const requestId = req.get("Request-Id") || randomUUID();
+    const requestId = req.header("Request-Id") || randomUUID();
 
-    req.headers["Request-Id"] = requestId;
+    req.headers["request-id"] = requestId;
 
     res.header("Request-Id", requestId);
   };
