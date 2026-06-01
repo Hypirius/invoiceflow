@@ -9,6 +9,7 @@ const NODE_ENV = process.env.NODE_ENV || "development";
 
 dotenvConfig({
   path: `${pathToEnv}/.env.${NODE_ENV}`,
+  quiet: true,
 });
 
 const configSchema = z.object({
