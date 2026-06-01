@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import AppError from "../lib/errors/AppError";
+import { globalErrorStates } from "../lib/errors/errorStates";
 
 type ApiErrorResType = {
   success: boolean;
@@ -32,15 +33,15 @@ function globalErrorMiddleware(
       ApiErrorRes.errors = err.errors;
     }
 
-    res.status(err.statusCode).send(ApiErrorRes);
+    res.status(err.statusCode).json(ApiErrorRes);
     return;
   } else {
     ApiErrorRes = {
       success: false,
-      message: "An internal server error occured",
-      code: "INTERNAL_SERVER_ERR",
+      message: globalErrorStates.INTERNAL_SERVER.message,
+      code: globalErrorStates.INTERNAL_SERVER.code,
     };
-    res.status(500).send(ApiErrorRes);
+    res.status(500).json(ApiErrorRes);
   }
 }
 
