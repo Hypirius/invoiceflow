@@ -16,9 +16,9 @@ enum Role {
 model User {
   id Int @id @default(autoincrement())
   email String @unique 
-  full_name String
-  display_name String
-  profile_image String
+  fullName String @map("full_name")
+  displayName String @map("display_name")
+  profileImage String @map("profile_name")
   password String
   role Role @default(user)
   createdAt DateTime @default(now()) 
