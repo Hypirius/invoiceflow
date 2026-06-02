@@ -18,6 +18,7 @@ const configSchema = z.object({
   PORT: z.number().default(5000),
   DATABASE_URL: z.string(),
   WHITELIST_CLIENTS: z.array(z.url()),
+  BCRYPT_SALT_ROUNDS: z.number(),
 });
 
 const config = configSchema.parse({
@@ -26,6 +27,7 @@ const config = configSchema.parse({
   PORT: Number(process.env.PORT),
   DATABASE_URL: process.env.DATABASE_URL,
   WHITELIST_CLIENTS: JSON.parse(process.env.WHITELIST_CLIENTS as string),
+  BCRYPT_SALT_ROUNDS: Number(process.env.BCRYPT_SALT_ROUNDS),
 });
 
 export default config;
