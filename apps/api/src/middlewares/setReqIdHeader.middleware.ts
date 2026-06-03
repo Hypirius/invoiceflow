@@ -8,6 +8,8 @@ function setRequestIdHeader() {
     req.headers["request-id"] = requestId;
 
     res.header("Request-Id", requestId);
+
+    next();
   };
 }
 
