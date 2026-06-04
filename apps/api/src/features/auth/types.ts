@@ -2,6 +2,8 @@ type JwtPayloadType = {
   sub: string;
   email: string;
   displayName: string;
+  role: string;
+  typ?: "refresh";
 };
 
 export type { JwtPayloadType };
