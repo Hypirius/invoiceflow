@@ -1,9 +1,13 @@
 class ApiSuccessResponse {
   success: true;
+  message: string;
   data: unknown;
-  constructor(data: unknown) {
+  constructor(message: string, data?: unknown) {
     this.success = true;
-    this.data = data;
+    this.message = message;
+    if (data) {
+      this.data = data;
+    }
   }
 }
 
