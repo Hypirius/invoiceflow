@@ -24,4 +24,16 @@ async function generateRefreshToken(payload: JwtPayloadType) {
   return await generateJWT(payload, config.JWT_REFRESH_EXPIRES_IN);
 }
 
-export { generateJWT, generateAccessToken, generateRefreshToken };
+async function generateDualTokens(payload: JwtPayloadType) {
+  return {
+    accessToken: await generateAccessToken(payload),
+    refreshToken: await generateRefreshToken({...payload, typ:"refresh"}),
+  };
+}
+
+export {
+  generateJWT,
+  generateAccessToken,
+  generateRefreshToken,
+  generateDualTokens,
+};
