@@ -12,4 +12,16 @@ class UserExistsError extends AppError {
   }
 }
 
-export { UserExistsError };
+class IncorrectDetailsError extends AppError {
+  constructor() {
+    super(
+      "Email or password is incorrect",
+      401,
+      "ERR_INCORRECT_DETAILS",
+      true,
+      "IncorrectDetailsError",
+    );
+  }
+}
+
+export { UserExistsError, IncorrectDetailsError };
