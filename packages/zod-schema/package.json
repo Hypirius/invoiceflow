@@ -7,6 +7,10 @@
     "access": "public"
   },
   "dependencies": {
+    "@repo/typescript-config": "workspace:*",
     "zod": "^4.4.3"
+  },
+  "exports": {
+    "./*": "./src/*"
   }
 }
