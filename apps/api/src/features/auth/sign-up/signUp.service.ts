@@ -5,6 +5,7 @@ import { ValidationError } from "@/lib/errors/ErrorClasses";
 import hashify from "@/features/auth/utils/hashify";
 import {
   generateAccessToken,
+  generateDualTokens,
   generateRefreshToken,
 } from "../utils/generateJWT";
 import defaultImageUrl from "@/constants/defaultImageUrl";
@@ -29,19 +30,18 @@ async function signUpService(data: userSignUpDetailsType) {
 
   const userId = randomUUID();
 
-  const accessToken = await generateAccessToken({
+  const tokens = await generateDualTokens({
     sub: userId,
     email: data.email,
     displayName: data.displayName,
+    role: "user",
   });
 
-  const refreshToken = await generateRefreshToken({
-    sub: userId,
-    email: data.email,
-    displayName: data.displayName,
-  });
-
-  await createUser({ id: userId, ...data, refreshToken } as UserModelType);
+  await createUser({
+    id: userId,
+    ...data,
+    refreshToken: tokens.refreshToken,
+  } as UserModelType);
 
   return {
     data: {
@@ -50,10 +50,7 @@ async function signUpService(data: userSignUpDetailsType) {
       displayName: data.displayName,
       profileImage: data.profileImage,
     },
-    jwt: {
-      accessToken,
-      refreshToken,
-    },
+    jwt: tokens,
   };
 }
 
