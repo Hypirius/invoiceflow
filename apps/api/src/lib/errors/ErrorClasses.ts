@@ -15,7 +15,7 @@ class ForbiddenError extends AppError {
 }
 
 class ValidationError extends AppError {
-  constructor(errors: $ZodIssue[]) {
+  constructor(errors?: $ZodIssue[]) {
     super(
       globalErrorStates.VALIDATION_ERR.message,
       400,
