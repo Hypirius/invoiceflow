@@ -5,7 +5,6 @@ import { JwtPayloadType } from "../types";
 type payloadType = Record<any, any>;
 
 async function generateJWT(payload: payloadType, expiresIn: string | number) {
-  const secret = new TextEncoder().encode(config.JWT_SECRET_KEY);
   return await new jose.SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -13,7 +12,7 @@ async function generateJWT(payload: payloadType, expiresIn: string | number) {
     .setAudience("invoiceflow-frontend")
     .setExpirationTime(expiresIn)
     .setJti(String(Math.floor(Math.random() * 90000 + 10000)))
-    .sign(secret);
+    .sign(config.JWT_SECRET_KEY);
 }
 
 async function generateAccessToken(payload: JwtPayloadType) {
@@ -27,7 +26,7 @@ async function generateRefreshToken(payload: JwtPayloadType) {
 async function generateDualTokens(payload: JwtPayloadType) {
   return {
     accessToken: await generateAccessToken(payload),
-    refreshToken: await generateRefreshToken({...payload, typ:"refresh"}),
+    refreshToken: await generateRefreshToken({ ...payload, typ: "refresh" }),
   };
 }
 

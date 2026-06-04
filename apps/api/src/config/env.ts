@@ -19,7 +19,7 @@ const configSchema = z.object({
   DATABASE_URL: z.string(),
   WHITELIST_CLIENTS: z.array(z.url()),
   BCRYPT_SALT_ROUNDS: z.number(),
-  JWT_SECRET_KEY: z.string(),
+  JWT_SECRET_KEY: z.instanceof(Uint8Array),
   JWT_ACCESS_EXPIRES_IN: z.string().or(z.number()),
   JWT_REFRESH_EXPIRES_IN: z.string().or(z.number()),
 });
@@ -31,7 +31,7 @@ const config = configSchema.parse({
   DATABASE_URL: process.env.DATABASE_URL,
   WHITELIST_CLIENTS: JSON.parse(process.env.WHITELIST_CLIENTS as string),
   BCRYPT_SALT_ROUNDS: Number(process.env.BCRYPT_SALT_ROUNDS),
-  JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
+  JWT_SECRET_KEY: new TextEncoder().encode(process.env.JWT_SECRET_KEY),
   JWT_ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN,
   JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN,
 });
