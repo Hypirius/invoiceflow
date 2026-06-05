@@ -16,12 +16,13 @@ const app: Express = express();
 app.use(setRequestIdHeader());
 app.use(helmet());
 app.use(httpLogger);
-app.use(allowedClients());
+if (config.NODE_ENV === "production") {
+  app.use(allowedClients());
+}
 app.use(cors({ origin: config.WHITELIST_CLIENTS }));
 app.use(express.json());
 app.use(cookieParser(config.COOKIE_SECRET));
 app.use(checkAuth());
-
 app.use("/v1", authRouter);
 app.use(globalErrorMiddleware);
 
