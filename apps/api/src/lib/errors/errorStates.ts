@@ -11,11 +11,6 @@ const globalErrorStates = {
     code: "ERR_VALIDATION_FAILED",
     message: "One or more fields have incorrect state or format",
   },
-  AUTHENTICATION_ERR: {
-    code: "ERR_AUTHENICATION_FAILED",
-    message:
-      "Missing or incorrect authorization token, go to /access-token to regenerate token or login again",
-  },
 };
 
 export { globalErrorStates };
