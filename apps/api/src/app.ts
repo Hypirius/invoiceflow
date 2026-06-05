@@ -18,7 +18,7 @@ app.use(httpLogger);
 app.use(allowedClients());
 app.use(cors({ origin: config.WHITELIST_CLIENTS }));
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser(config.COOKIE_SECRET));
 app.use("/v1", authRouter);
 app.use(globalErrorMiddleware);
 

@@ -22,6 +22,7 @@ const configSchema = z.object({
   JWT_SECRET_KEY: z.instanceof(Uint8Array),
   JWT_ACCESS_EXPIRES_IN: z.string().or(z.number()),
   JWT_REFRESH_EXPIRES_IN: z.string().or(z.number()),
+  COOKIE_SECRET: z.string(),
 });
 
 const config = configSchema.parse({
@@ -34,6 +35,7 @@ const config = configSchema.parse({
   JWT_SECRET_KEY: new TextEncoder().encode(process.env.JWT_SECRET_KEY),
   JWT_ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN,
   JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN,
+  COOKIE_SECRET: process.env.COOKIE_SECRET,
 });
 export default config;
 
