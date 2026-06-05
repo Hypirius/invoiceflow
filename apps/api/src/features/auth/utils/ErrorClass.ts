@@ -1,4 +1,5 @@
 import AppError from "@/lib/errors/AppError";
+import { $ZodIssue } from "zod/v4/core";
 
 class UserExistsError extends AppError {
   constructor() {
@@ -96,6 +97,19 @@ class TokenInvalidError extends AppError {
   }
 }
 
+class AuthenicationFailedError extends AppError {
+  constructor(data: $ZodIssue[]) {
+    super(
+      "Missing or incorrect authorization token, go to /access-token to regenerate token or login again",
+      403,
+      "ERR_AUTHENICATION_FAILED",
+      true,
+      "AuthenicationFailedError",
+      data,
+    );
+  }
+}
+
 export {
   UserExistsError,
   IncorrectDetailsError,
@@ -105,4 +119,5 @@ export {
   TokenUserNotExistsError,
   TokenDecryptionFailedError,
   TokenInvalidError,
+  AuthenicationFailedError,
 };
