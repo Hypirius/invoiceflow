@@ -23,6 +23,10 @@ const configSchema = z.object({
   JWT_ACCESS_EXPIRES_IN: z.string().or(z.number()),
   JWT_REFRESH_EXPIRES_IN: z.string().or(z.number()),
   COOKIE_SECRET: z.string(),
+  CLOUDINARY_API_KEY: z.string(),
+  CLOUDINARY_API_SECRET: z.string(),
+  CLOUDINARY_CLOUD_NAME: z.string(),
+  CLOUDINARY_UPLOAD_FOLDER: z.string(),
 });
 
 const config = configSchema.parse({
@@ -36,6 +40,10 @@ const config = configSchema.parse({
   JWT_ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN,
   JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN,
   COOKIE_SECRET: process.env.COOKIE_SECRET,
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_KEY,
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
+  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+  CLOUDINARY_UPLOAD_FOLDER: process.env.CLOUDINARY_UPLOAD_FOLDER,
 });
 export default config;
 
