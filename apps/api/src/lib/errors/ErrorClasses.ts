@@ -27,4 +27,16 @@ class ValidationError extends AppError {
   }
 }
 
-export { ForbiddenError, ValidationError };
+class AuthenicationFailedError extends AppError {
+  constructor() {
+    super(
+      globalErrorStates.AUTHENTICATION_ERR.message,
+      403,
+      globalErrorStates.AUTHENTICATION_ERR.code,
+      true,
+      "AuthenicationFailedError",
+    );
+  }
+}
+
+export { ForbiddenError, ValidationError, AuthenicationFailedError };
