@@ -25,14 +25,14 @@ class IncorrectDetailsError extends AppError {
   }
 }
 
-class UserNotFound extends AppError {
+class UserNotFoundError extends AppError {
   constructor() {
     super(
       "User on data was not found",
       404,
       "ERR_USER_NOT_FOUND",
       true,
-      "UserNotFound",
+      "UserNotFoundError",
     );
   }
 }
@@ -113,7 +113,7 @@ class AuthenicationFailedError extends AppError {
 export {
   UserExistsError,
   IncorrectDetailsError,
-  UserNotFound,
+  UserNotFoundError,
   TokenExpiredError,
   DBTokenMismatch,
   TokenUserNotExistsError,

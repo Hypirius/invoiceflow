@@ -1,6 +1,6 @@
 import prisma from "@/config/db";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
-import { UserNotFound } from "../utils/ErrorClass";
+import { UserNotFoundError } from "../utils/ErrorClass";
 
 async function findRefreshTokenById(id: string) {
   const token = await prisma.user.findUnique({
@@ -13,7 +13,7 @@ async function findRefreshTokenById(id: string) {
   });
 
   if (!token) {
-    throw new UserNotFound();
+    throw new UserNotFoundError();
   }
 
   return token;
@@ -31,7 +31,7 @@ async function updateDBRefreshToken(id: string, refreshToken: string) {
     });
   } catch (err) {
     if (err instanceof PrismaClientKnownRequestError && err.code === "P2025") {
-      throw new UserNotFound();
+      throw new UserNotFoundError();
     } else {
       throw err;
     }
