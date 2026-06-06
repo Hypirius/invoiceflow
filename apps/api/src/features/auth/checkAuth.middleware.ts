@@ -24,6 +24,8 @@ function checkAuth() {
       return next(new TokenExpiredError());
     }
 
+    req.headers["jwt-payload"] = JSON.stringify("jwt-payload");
+
     next();
   };
 }
