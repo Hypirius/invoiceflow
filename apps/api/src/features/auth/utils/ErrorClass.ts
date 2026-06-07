@@ -110,6 +110,18 @@ class AuthenicationFailedError extends AppError {
   }
 }
 
+class PasswordHashMismatchError extends AppError {
+  constructor() {
+    super(
+      "Incorrect password was provided",
+      403,
+      "ERR_PASSWORD_INCORRECT",
+      true,
+      "PasswordHashMismatch",
+    );
+  }
+}
+
 export {
   UserExistsError,
   IncorrectDetailsError,
@@ -120,4 +132,5 @@ export {
   TokenDecryptionFailedError,
   TokenInvalidError,
   AuthenicationFailedError,
+  PasswordHashMismatchError,
 };

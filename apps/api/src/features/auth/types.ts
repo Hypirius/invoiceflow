@@ -1,3 +1,4 @@
+import { userSignUpDetailsType } from "@repo/zod-schema/auth/types/signUp.types.js";
 import { JWTPayload } from "jose";
 
 interface JwtPayloadType extends JWTPayload {
@@ -7,6 +8,8 @@ interface JwtPayloadType extends JWTPayload {
   role: string;
   typ?: "refresh";
 }
+
+export type changeDetailsType = Partial<userSignUpDetailsType>;
 
 export type { JwtPayloadType };
 
