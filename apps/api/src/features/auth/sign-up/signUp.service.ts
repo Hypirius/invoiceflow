@@ -1,22 +1,14 @@
 import { userSignUpDetailsSchema } from "@repo/zod-schema/auth/signUp.schema.ts";
 import { userSignUpDetailsType } from "@repo/zod-schema/auth/types/signUp.types.ts";
 import { createUser, UserModelType } from "./signUp.repository";
-import { ValidationError } from "@/lib/errors/ErrorClasses";
 import hashify from "@/features/auth/utils/hashify";
-import {
-  generateAccessToken,
-  generateDualTokens,
-  generateRefreshToken,
-} from "../utils/generateJWT";
+import { generateDualTokens } from "../utils/generateJWT";
 import defaultImageUrl from "@/constants/defaultImageUrl";
 import { randomUUID } from "crypto";
+import validateSchema from "../utils/validateSchema";
 
 async function signUpService(data: userSignUpDetailsType) {
-  const validation = userSignUpDetailsSchema.safeParse(data);
-
-  if (!validation.success) {
-    throw new ValidationError(validation.error.issues);
-  }
+  validateSchema<userSignUpDetailsType>(userSignUpDetailsSchema, data);
 
   if (!data.displayName) {
     data.displayName = data.fullName;

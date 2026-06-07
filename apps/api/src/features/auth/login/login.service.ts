@@ -1,19 +1,18 @@
-import { ValidationError } from "@/lib/errors/ErrorClasses";
 import { userLoginDetailsSchema } from "@repo/zod-schema/auth/login.schema.js";
 import { userLoginDetailsType } from "@repo/zod-schema/auth/types/signUp.types.js";
 import findUserByEmail from "./login.repository";
 import { IncorrectDetailsError } from "../utils/ErrorClass";
 import { generateDualTokens } from "../utils/generateJWT";
 import compareHash from "../utils/compareHash";
+import validateSchema from "../utils/validateSchema";
 
 async function loginService(data: userLoginDetailsType) {
-  const validationResult = userLoginDetailsSchema.safeParse(data);
+  const validationResult = validateSchema<userLoginDetailsType>(
+    userLoginDetailsSchema,
+    data,
+  );
 
-  if (!validationResult.success) {
-    throw new ValidationError(validationResult.error.issues);
-  }
-
-  const dbResult = await findUserByEmail(validationResult.data.email);
+  const dbResult = await findUserByEmail(validationResult.email);
 
   if (!dbResult) {
     throw new IncorrectDetailsError();
