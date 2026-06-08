@@ -8,41 +8,44 @@ import { randomUUID } from "crypto";
 import validateSchema from "../utils/validateSchema";
 
 async function signUpService(data: userSignUpDetailsType) {
-  validateSchema<userSignUpDetailsType>(userSignUpDetailsSchema, data);
+  const result = validateSchema<userSignUpDetailsType>(
+    userSignUpDetailsSchema,
+    data,
+  );
 
-  if (!data.displayName) {
-    data.displayName = data.fullName;
+  if (!result.displayName) {
+    result.displayName = result.fullName;
   }
 
-  if (!data.profileImage) {
-    data.profileImage = defaultImageUrl;
+  if (!result.profileImage) {
+    result.profileImage = defaultImageUrl;
   }
 
-  data.password = await hashify(data.password);
+  result.password = await hashify(result.password);
 
   const userId = randomUUID();
 
   const tokens = await generateDualTokens({
     sub: userId,
-    email: data.email,
-    displayName: data.displayName,
+    email: result.email,
+    displayName: result.displayName,
     role: "user",
   });
 
   await createUser({
     id: userId,
-    ...data,
-    refreshToken: tokens.refreshToken,
+    ...result,
   } as UserModelType);
 
   return {
     data: {
-      email: data.email,
-      fullName: data.email,
-      displayName: data.displayName,
-      profileImage: data.profileImage,
+      userId,
+      email: result.email,
+      fullName: result.email,
+      displayName: result.displayName,
+      profileImage: result.profileImage,
     },
-    jwt: tokens,
+    tokens,
   };
 }
 

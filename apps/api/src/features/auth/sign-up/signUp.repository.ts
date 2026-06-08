@@ -3,7 +3,7 @@ import {
   PrismaClientKnownRequestError,
   PrismaClientValidationError,
 } from "@prisma/client/runtime/client";
-import { UserExistsError } from "../utils/ErrorClass";
+import { TokenExistsError, UserExistsError } from "../utils/ErrorClass";
 import { ValidationError } from "@/lib/errors/ErrorClasses";
 
 export type UserModelType = {
@@ -13,8 +13,24 @@ export type UserModelType = {
   password: string;
   displayName: string;
   profileImage: string;
-  refreshToken: string;
 };
+
+export type RefreshTokenType = {
+  expiresAt: Date;
+  oldToken: string | null;
+  token: string;
+  ipAddress: string | null;
+  userAgent: string | null;
+  userId: string;
+};
+
+function checkCreationError(err: unknown) {
+  if (err instanceof PrismaClientValidationError) {
+    throw new ValidationError();
+  } else {
+    throw err;
+  }
+}
 
 async function createUser(data: UserModelType) {
   try {
@@ -24,12 +40,22 @@ async function createUser(data: UserModelType) {
   } catch (err) {
     if (err instanceof PrismaClientKnownRequestError && err.code === "P2002") {
       throw new UserExistsError();
-    } else if (err instanceof PrismaClientValidationError) {
-      throw new ValidationError();
-    } else {
-      throw err;
     }
+    checkCreationError(err);
   }
 }
 
-export { createUser };
+async function createRefreshToken(data: RefreshTokenType) {
+  try {
+    return await prisma.refreshTokens.create({
+      data,
+    });
+  } catch (err) {
+    if (err instanceof PrismaClientKnownRequestError && err.code === "P2002") {
+      throw new TokenExistsError();
+    }
+    checkCreationError(err);
+  }
+}
+
+export { createUser, createRefreshToken };

@@ -122,6 +122,18 @@ class PasswordHashMismatchError extends AppError {
   }
 }
 
+class TokenExistsError extends AppError {
+  constructor() {
+    super(
+      "Unable to generate tokens, already exists",
+      422,
+      "ERR_TOKEN_EXISTS",
+      true,
+      "TokenExistsError",
+    );
+  }
+}
+
 export {
   UserExistsError,
   IncorrectDetailsError,
@@ -133,4 +145,7 @@ export {
   TokenInvalidError,
   AuthenicationFailedError,
   PasswordHashMismatchError,
+  TokenExistsError,
 };
+
+//TODO: CHECK ALL STATUS CODE AND CHANGE THE ERROR STATES TO A SEPARATE OBJECT
