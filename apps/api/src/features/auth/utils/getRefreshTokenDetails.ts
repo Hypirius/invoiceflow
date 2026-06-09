@@ -1,5 +1,5 @@
 import { Request } from "express";
-import generateJWTExpiryTime from "./generateJWTExpiryTime";
+import generateExpiryTime from "./generateExpiryTime";
 import config from "@/config/env";
 import generateRefreshTokenHash from "./generateRefreshTokenHash";
 
@@ -14,7 +14,7 @@ async function getRefreshTokenDetails(
     token: await generateRefreshTokenHash(),
     ipAddress: req.ip || null,
     userAgent: req.headers["user-agent"] || null,
-    expiresAt: generateJWTExpiryTime(config.JWT_ACCESS_EXPIRES_IN),
+    expiresAt: generateExpiryTime(config.JWT_ACCESS_EXPIRES_IN),
   };
 }
 
