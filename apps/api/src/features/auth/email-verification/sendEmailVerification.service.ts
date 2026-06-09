@@ -8,7 +8,7 @@ import validateSchema from "../utils/validateSchema";
 import z from "zod";
 import { EmailRedisPayload } from "../types";
 import generateExpiryTime from "../utils/generateExpiryTime";
-import { pushToCache } from "./emailVerification.repository";
+import { upsertToCache } from "./emailVerification.repository";
 import sendEmail from "@/utils/sendEmail";
 
 async function sendVerificationEmailService(
@@ -28,7 +28,7 @@ async function sendVerificationEmailService(
     expiresAt: generateExpiryTime(emailOtpExpiryTime).getSeconds(),
   };
 
-  await pushToCache(emailPayload);
+  await upsertToCache(emailPayload);
 
   const data = await sendEmail({
     from: config.EMAIL_FROM,

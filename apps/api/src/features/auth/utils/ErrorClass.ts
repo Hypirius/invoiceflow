@@ -134,6 +134,30 @@ class TokenExistsError extends AppError {
   }
 }
 
+class IncorrectOtpError extends AppError {
+  constructor() {
+    super(
+      "Provided otp does not match",
+      404,
+      "ERR_OTP_INCORRECT",
+      true,
+      "IncorrectOtpError",
+    );
+  }
+}
+
+class AttemptsExceededError extends AppError {
+  constructor() {
+    super(
+      "Too many attempts on otp, invalidating otp",
+      429,
+      "ERR_ATTEMPTS_EXCEEDED",
+      true,
+      "AttemptsExceededError",
+    );
+  }
+}
+
 export {
   UserExistsError,
   IncorrectDetailsError,
@@ -146,6 +170,8 @@ export {
   AuthenicationFailedError,
   PasswordHashMismatchError,
   TokenExistsError,
+  IncorrectOtpError,
+  AttemptsExceededError,
 };
 
 //TODO: CHECK ALL STATUS CODE AND CHANGE THE ERROR STATES TO A SEPARATE OBJECT
