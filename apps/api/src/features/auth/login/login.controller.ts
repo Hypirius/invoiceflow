@@ -2,17 +2,23 @@ import { Request, Response } from "express";
 import loginService from "./login.service";
 import ApiSuccessResponse from "@/utils/ApiSuccessResponse";
 import setCookieConfig from "../utils/setCookieConfig";
+import publishRefreshTokenService from "../sign-up/publishRefreshToken.service";
+import getRefreshTokenDetails from "../utils/getRefreshTokenDetails";
 
 async function loginController(req: Request, res: Response) {
-  const result = await loginService(req.body);
+  const { data, accessToken, userId } = await loginService(req.body);
+
+  const tokenDetails = await getRefreshTokenDetails(req, userId);
+
+  const refreshToken = await publishRefreshTokenService(tokenDetails);
 
   res.clearCookie("session_token");
-  res.cookie("session_token", result.jwt.refreshToken, setCookieConfig());
+  res.cookie("session_token", refreshToken, setCookieConfig());
 
   res.status(200).json(
     new ApiSuccessResponse("User has been logged in successfully.", {
-      ...result.data,
-      accessToken: result.jwt.accessToken,
+      ...data,
+      accessToken: accessToken,
     }),
   );
 }
