@@ -11,6 +11,10 @@ const globalErrorStates = {
     code: "ERR_VALIDATION_FAILED",
     message: "One or more fields have incorrect state or format",
   },
+  EMAIL_SERVICE_ERR: {
+    code: "ERR_EMAIL_SEND_FAILED",
+    message: "Unable to send verification email, please try again later",
+  },
 };
 
 export { globalErrorStates };

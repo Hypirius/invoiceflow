@@ -9,8 +9,17 @@ interface JwtPayloadType extends JWTPayload {
   typ?: "refresh";
 }
 
+type EmailRedisPayload = {
+  email: string;
+  otp: number;
+  userId: string | null;
+  attempts: number;
+  invalid: boolean;
+  expiresAt: number;
+};
+
 export type changeDetailsType = Partial<userSignUpDetailsType>;
 
-export type { JwtPayloadType };
+export type { JwtPayloadType, EmailRedisPayload };
 
 // TODO: Will need to be changed to support other related features

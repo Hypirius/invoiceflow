@@ -27,4 +27,16 @@ class ValidationError extends AppError {
   }
 }
 
-export { ForbiddenError, ValidationError };
+class EmailServiceError extends AppError {
+  constructor() {
+    super(
+      globalErrorStates.EMAIL_SERVICE_ERR.message,
+      500,
+      globalErrorStates.EMAIL_SERVICE_ERR.code,
+      true,
+      "EmailServiceError",
+    );
+  }
+}
+
+export { ForbiddenError, ValidationError, EmailServiceError };
