@@ -18,4 +18,4 @@ async function findInCache(email: string) {
   return await redisClient.hGetAll(cacheKey);
 }
 
-export default pushToCache;
+export { pushToCache, findInCache, getEmailCacheKey };
