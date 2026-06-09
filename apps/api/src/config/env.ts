@@ -30,6 +30,7 @@ const configSchema = z.object({
   EMAIL_SERVICE_SECRET: z.string(),
   EMAIL_FROM: z.string(),
   EMAIL_TEMPLATE_ID: z.string(),
+  REDIS_URL: z.string(),
 });
 
 const config = configSchema.parse({
@@ -50,6 +51,7 @@ const config = configSchema.parse({
   EMAIL_SERVICE_SECRET: process.env.EMAIL_SERVICE_SECRET,
   EMAIL_FROM: process.env.EMAIL_FROM,
   EMAIL_TEMPLATE_ID: process.env.EMAIL_TEMPLATE_ID,
+  REDIS_URL: process.env.REDIS_URL,
 });
 export default config;
 
