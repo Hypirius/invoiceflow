@@ -27,6 +27,9 @@ const configSchema = z.object({
   CLOUDINARY_API_SECRET: z.string(),
   CLOUDINARY_CLOUD_NAME: z.string(),
   CLOUDINARY_UPLOAD_FOLDER: z.string(),
+  EMAIL_SERVICE_SECRET: z.string(),
+  EMAIL_FROM: z.string(),
+  EMAIL_TEMPLATE_ID: z.string(),
 });
 
 const config = configSchema.parse({
@@ -44,6 +47,9 @@ const config = configSchema.parse({
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
   CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
   CLOUDINARY_UPLOAD_FOLDER: process.env.CLOUDINARY_UPLOAD_FOLDER,
+  EMAIL_SERVICE_SECRET: process.env.EMAIL_SERVICE_SECRET,
+  EMAIL_FROM: process.env.EMAIL_FROM,
+  EMAIL_TEMPLATE_ID: process.env.EMAIL_TEMPLATE_ID,
 });
 export default config;
 
