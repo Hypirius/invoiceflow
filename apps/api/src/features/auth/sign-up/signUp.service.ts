@@ -7,42 +7,50 @@ import defaultImageUrl from "@/constants/defaultImageUrl";
 import { randomUUID } from "crypto";
 import validateSchema from "../utils/validateSchema";
 
-async function signUpService(data: userSignUpDetailsType) {
-  const result = validateSchema<userSignUpDetailsType>(
-    userSignUpDetailsSchema,
-    data,
-  );
+async function signUpService(
+  data: userSignUpDetailsType,
+  emailVerfied: boolean = false,
+) {
+  let { email, displayName, fullName, profileImage, password } =
+    validateSchema<userSignUpDetailsType>(userSignUpDetailsSchema, data);
 
-  if (!result.displayName) {
-    result.displayName = result.fullName;
+  if (!displayName) {
+    displayName = fullName;
   }
 
-  if (!result.profileImage) {
-    result.profileImage = defaultImageUrl;
+  if (!profileImage) {
+    profileImage = defaultImageUrl;
   }
 
-  result.password = await hashify(result.password);
+  if (password) {
+    password = await hashify(password);
+  }
 
   const userId = randomUUID();
 
   const accessToken = await generateAccessToken({
     sub: userId,
-    email: result.email,
-    displayName: result.displayName,
+    email: email,
+    displayName: displayName,
     role: "user",
   });
 
   await createUser({
     id: userId,
-    ...result,
+    email,
+    displayName,
+    fullName,
+    profileImage,
+    password: password ?? null,
+    emailVerfied,
   } as UserModelType);
 
   return {
     data: {
-      email: result.email,
-      fullName: result.email,
-      displayName: result.displayName,
-      profileImage: result.profileImage,
+      email,
+      fullName,
+      displayName,
+      profileImage,
     },
     accessToken,
     userId,
