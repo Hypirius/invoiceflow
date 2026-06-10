@@ -49,13 +49,13 @@ async function googleOauthCallbackService(
   }
 
   await createOauthUser({
-    id: sub,
+    providerId: sub,
     issuer: iss,
     userId: userDetails?.userId,
   });
 
   const accessToken = generateAccessToken({
-    sub,
+    sub: userDetails?.userId,
     email,
     displayName: name,
     role: "user",

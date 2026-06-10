@@ -1,7 +1,7 @@
 import prisma from "@/config/db";
 
 type createOauthUserData = {
-  id: string;
+  providerId: string | null;
   issuer: string;
   userId: string;
 };
