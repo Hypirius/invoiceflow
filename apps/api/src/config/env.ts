@@ -31,6 +31,9 @@ const configSchema = z.object({
   EMAIL_FROM: z.string(),
   EMAIL_TEMPLATE_ID: z.string(),
   REDIS_URL: z.string(),
+  GOOGLE_OAUTH_ID: z.string(),
+  GOOGLE_OAUTH_SECRET_KEY: z.string(),
+  OAUTH_REDIRECT_URL: z.url(),
 });
 
 const config = configSchema.parse({
@@ -52,6 +55,9 @@ const config = configSchema.parse({
   EMAIL_FROM: process.env.EMAIL_FROM,
   EMAIL_TEMPLATE_ID: process.env.EMAIL_TEMPLATE_ID,
   REDIS_URL: process.env.REDIS_URL,
+  GOOGLE_OAUTH_ID: process.env.GOOGLE_OAUTH_ID,
+  GOOGLE_OAUTH_SECRET_KEY: process.env.GOOGLE_OAUTH_SECRET_KEY,
+  OAUTH_REDIRECT_URL: process.env.OAUTH_REDIRECT_URL,
 });
 export default config;
 

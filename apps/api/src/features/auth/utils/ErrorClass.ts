@@ -158,6 +158,30 @@ class AttemptsExceededError extends AppError {
   }
 }
 
+class StateMismatchError extends AppError {
+  constructor() {
+    super(
+      "State provided by oauth provider and client do not match",
+      401,
+      "ERR_STATE_MISMATCH",
+      true,
+      "StateMismatchError",
+    );
+  }
+}
+
+class OauthProviderError extends AppError {
+  constructor() {
+    super(
+      "Unable to process oauth, provider returned error",
+      422,
+      "ERR_PROVIDER_REJECTED",
+      true,
+      "OauthProviderError",
+    );
+  }
+}
+
 export {
   UserExistsError,
   IncorrectDetailsError,
@@ -172,6 +196,8 @@ export {
   TokenExistsError,
   IncorrectOtpError,
   AttemptsExceededError,
+  StateMismatchError,
+  OauthProviderError,
 };
 
 //TODO: CHECK ALL STATUS CODE AND CHANGE THE ERROR STATES TO A SEPARATE OBJECT
