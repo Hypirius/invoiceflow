@@ -67,7 +67,11 @@ model OauthProvider {
 model Organisation {
   id Int @id @default(autoincrement())
   name String
-  address String
+  country String
+  street_address String
+  state String
+  city String
+  zipCode String @map("zip_code")
   phoneNumber String @map("phone_number")
   logoLink String @map("logo_link")
 
