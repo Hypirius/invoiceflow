@@ -62,3 +62,80 @@ model OauthProvider {
   @@unique([userId, issuer]) // add error handling in oauth repository
   @@map("oauth_provider")
 }
+
+model Organisation {
+  id Int @id @default(autoincrement())
+  name String
+  address String
+  phoneNumber String @map("phone_number")
+  logoLink String @map("logo_link")
+
+  organisationMembers OrganisationMembers[]
+  organisationRoles OrganisationRoles[]
+
+  createdAt DateTime @default(now()) 
+  updatedAt DateTime @updatedAt
+  @@map("organisation")
+}
+
+model OrganisationMembers {
+  id Int @id @default(autoincrement())
+  organisationId Int @map("organisation_id")
+  userId String @map("user_id")
+  roleId Int @map("role_id")
+
+  createdAt DateTime @default(now()) 
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  role OrganisationRoles @relation(fields: [roleId], references: [id])
+
+  @@unique([organisationId, userId])
+  @@index([roleId])
+  @@index([userId])
+  @@map("organisation_members")
+}
+
+enum Permissions {
+  read
+  create
+  update
+  delete
+}
+
+enum Resources {
+  invoice
+  reports
+  // More should be added as app grows
+}
+
+model OrganisationRoles {
+  id Int @id @default(autoincrement())
+  organisationId Int @map("organisation_id") 
+  roleName String @map("role_name")
+
+  organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+
+  members OrganisationMembers[]
+  permission MemberPermissions[]
+
+  @@unique(fields: [organisationId, roleName])
+  @@index([roleName])
+  @@map("organisation_roles")
+}
+
+model MemberPermissions {
+  id Int @id @default(autoincrement())
+  roleId Int @map("role_id")
+  action Permissions
+  resource Resources
+
+  createdAt DateTime @default(now()) 
+  updatedAt DateTime @updatedAt
+
+  orgRole OrganisationRoles @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  @@unique(fields: [roleId, action, resource])
+
+  @@map("member_permissions")
+}
