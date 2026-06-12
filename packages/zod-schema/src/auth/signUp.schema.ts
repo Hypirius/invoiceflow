@@ -2,7 +2,7 @@ import z from "zod";
 
 const userSignUpPrimaryDetailsSchema = z
   .object({
-    email: z.email().trim(),
+    email: z.email().trim().toLowerCase(),
     fullName: z.string().trim(),
     password: z
       .string()
