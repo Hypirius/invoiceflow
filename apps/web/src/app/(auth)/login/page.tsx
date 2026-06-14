@@ -17,7 +17,7 @@ export default function LoginMenu() {
       <AuthRedirect
         prompt="Don't have an account?"
         href="/sign-up"
-        linkText="Sign for access"
+        linkText="Sign up for access"
       />
     </>
   );
