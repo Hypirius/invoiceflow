@@ -18,7 +18,13 @@ export default function InputWithLabel({
 }: InputWithLabelProps) {
   return (
     <>
-      <label className={cn("text-black", labelClassName)} htmlFor={id}>
+      <label
+        className={cn(
+          "text-[#191C1E] font-bold text-[14px] mb-1 block",
+          labelClassName,
+        )}
+        htmlFor={id}
+      >
         {labelText}
       </label>
       <Input className={className} {...rest} id={id} />
