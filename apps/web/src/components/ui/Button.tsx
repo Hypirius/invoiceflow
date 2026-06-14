@@ -18,7 +18,7 @@ export default function Button({
       className={cn(
         `h-10 w-80 cursor-pointer`,
         {
-          "bg-[#4F46E5] text-[#F8FAFC]": variant === "primary",
+          "bg-[#3525CD] text-[#F8FAFC]": variant === "primary",
           "bg-[#0F172A] text-[#F8FAFC]": variant === "inverted",
           "bg-[#64748B] text-[#0F172A]": variant === "secondary",
           "bg-[#F8FAFC] text-[#0F172A] border-[#0F172A] border":
