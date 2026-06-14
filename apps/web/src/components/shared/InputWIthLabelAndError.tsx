@@ -18,7 +18,7 @@ export default function InputWithLabelAndError({
   ...rest
 }: InputWithLabelAndErrorProps) {
   return (
-    <div>
+    <div className="mb-5 h-20">
       <InputWithLabel
         id={id}
         labelText={labelText}
