@@ -10,7 +10,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "public/*": ["./public/*"]
-    }
+    },
+    "allowImportingTsExtensions": true
   },
   "include": [
     "**/*.ts",
