@@ -38,7 +38,7 @@ export default function LoginForm() {
     <form
       id="login-form"
       onSubmit={handleSubmit}
-      className="flex flex-col justify-center gap-5"
+      className="flex flex-col justify-center w-full"
     >
       <InputWithLabelAndError
         id="email"
