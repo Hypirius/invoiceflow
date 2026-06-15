@@ -10,10 +10,10 @@ async function loginController(req: Request, res: Response) {
 
   const tokenDetails = await getRefreshTokenDetails(req, userId);
 
-  const refreshToken = await publishRefreshTokenService(tokenDetails);
+  await publishRefreshTokenService(tokenDetails);
 
   res.clearCookie("session_token");
-  res.cookie("session_token", refreshToken, setCookieConfig());
+  res.cookie("session_token", tokenDetails.token, setCookieConfig());
 
   res.status(200).json(
     new ApiSuccessResponse("User has been logged in successfully.", {
