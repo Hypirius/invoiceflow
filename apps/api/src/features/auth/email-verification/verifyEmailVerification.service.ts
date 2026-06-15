@@ -1,4 +1,3 @@
-import { EmailRedisPayload } from "../types";
 import { AttemptsExceededError, IncorrectOtpError } from "../utils/ErrorClass";
 import {
   findInCache,
@@ -10,7 +9,7 @@ async function verifyEmailVerificationService(
   email: string,
   clientPassedOtp: number,
 ) {
-  const redisResult = await findInCache<EmailRedisPayload>(email);
+  const redisResult = await findInCache(email);
 
   if (redisResult.attempts > 10) {
     await InvalidateOtp(email);
