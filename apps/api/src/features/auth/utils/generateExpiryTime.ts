@@ -1,7 +1,7 @@
 import convertTimeValue from "@/utils/convertTimeValue";
 
 function generateExpiryTime(futureTime: unknown) {
-  return new Date(Date.now() + convertTimeValue(futureTime));
+  return convertTimeValue(futureTime) / 1000;
 }
 
 export default generateExpiryTime;
