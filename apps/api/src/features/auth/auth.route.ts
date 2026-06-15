@@ -2,10 +2,15 @@ import { Router } from "express";
 import type { Router as RouterType } from "express";
 import signUpController from "./sign-up/signUp.controller";
 import loginController from "./login/login.controller";
+import sendVerificationEmailController from "./email-verification/sendEmailVerification.controller";
+import verifyEmailVerificationController from "./email-verification/verifyEmailVerification.controller";
 
 const authRouter: RouterType = Router();
 
 authRouter.post("/sign-up", signUpController);
 authRouter.post("/login", loginController);
+
+authRouter.post("/send-email", sendVerificationEmailController);
+authRouter.post("/verify-email", verifyEmailVerificationController);
 
 export default authRouter;
