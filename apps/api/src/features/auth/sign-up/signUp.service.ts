@@ -9,7 +9,7 @@ import validateSchema from "../utils/validateSchema";
 
 async function signUpService(
   data: userSignUpDetailsType,
-  emailVerfied: boolean = false,
+  emailVerified: boolean = false,
 ) {
   let { email, displayName, fullName, profileImage, password } =
     validateSchema<userSignUpDetailsType>(userSignUpDetailsSchema, data);
@@ -42,7 +42,7 @@ async function signUpService(
     fullName,
     profileImage,
     password: password ?? null,
-    emailVerfied,
+    emailVerified,
   } as UserModelType);
 
   return {
