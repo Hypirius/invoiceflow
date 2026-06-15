@@ -1,6 +1,6 @@
 import { redisClient, generateCacheKey } from "@/config/redis";
 import { EmailRedisPayload } from "../types";
-import { IncorrectOtpError } from "../utils/ErrorClass";
+import { IncorrectOtpError, OtpNotExistsError } from "../utils/ErrorClass";
 
 function getEmailCacheKey(email: string) {
   const prefixCacheKey = generateCacheKey("/email"); //change this
@@ -9,20 +9,20 @@ function getEmailCacheKey(email: string) {
 
 async function upsertToCache(data: EmailRedisPayload) {
   const cacheKey = getEmailCacheKey(data.email);
-  await redisClient.hSet(cacheKey, data as Record<any, any>);
+  await redisClient.set(cacheKey, JSON.stringify(data));
 
   await redisClient.expire(cacheKey, data.expiresAt);
 }
 
-async function findInCache<T>(email: string) {
+async function findInCache(email: string) {
   const cacheKey = getEmailCacheKey(email);
-  const result = (await redisClient.hGetAll(cacheKey)) as T;
+  const result = (await redisClient.get(cacheKey)) as string;
 
   if (!result) {
-    throw new IncorrectOtpError();
+    throw new OtpNotExistsError();
   }
 
-  return result;
+  return JSON.parse(result) as EmailRedisPayload;
 }
 
 async function InvalidateOtp(email: string) {

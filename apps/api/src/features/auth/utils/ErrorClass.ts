@@ -182,6 +182,18 @@ class OauthProviderError extends AppError {
   }
 }
 
+class OtpNotExistsError extends AppError {
+  constructor() {
+    super(
+      "Otp on requested email was not found",
+      404,
+      "ERR_OTP_NOT_EXISTS",
+      true,
+      "OtpNotExistsError",
+    );
+  }
+}
+
 export {
   UserExistsError,
   IncorrectDetailsError,
@@ -198,6 +210,7 @@ export {
   AttemptsExceededError,
   StateMismatchError,
   OauthProviderError,
+  OtpNotExistsError,
 };
 
 //TODO: CHECK ALL STATUS CODE AND CHANGE THE ERROR STATES TO A SEPARATE OBJECT
