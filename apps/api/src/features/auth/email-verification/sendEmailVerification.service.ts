@@ -14,6 +14,7 @@ import sendEmail from "@/utils/sendEmail";
 async function sendVerificationEmailService(
   email: string,
   userId: string | null = null,
+  fullName: string,
 ) {
   validateSchema(z.email(), email);
 
@@ -25,7 +26,7 @@ async function sendVerificationEmailService(
     userId,
     attempts: 0,
     invalid: false,
-    expiresAt: generateExpiryTime(emailOtpExpiryTime).getSeconds(),
+    expiresAt: generateExpiryTime(emailOtpExpiryTime),
   };
 
   await upsertToCache(emailPayload);
@@ -37,10 +38,11 @@ async function sendVerificationEmailService(
     templateOptions: {
       id: config.EMAIL_TEMPLATE_ID,
       variables: {
-        COMPANY_NAME: "InvoiceFlow",
-        COMPANY_ADDRESS: "Dhaka, Bangladesh",
-        OTP_CODE: otp,
-        TIME: 15, // In mins
+        first_name: fullName?.split(" ")[0] || "there",
+        company_name: "InvoiceFlow",
+        company_address: "Dhaka, Bangladesh",
+        otp_code: otp.toString(),
+        time: "15", // In mins
       },
     },
   });
