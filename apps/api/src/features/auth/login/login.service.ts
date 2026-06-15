@@ -25,7 +25,7 @@ async function loginService(data: userLoginDetailsType) {
   const accessToken = await generateAccessToken({
     sub: dbResult.id,
     email: data.email,
-    displayName: dbResult.displayName,
+    displayName: dbResult.displayName ?? dbResult.fullName,
     role: dbResult.role,
   });
 
