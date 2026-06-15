@@ -12,8 +12,8 @@ async function findUserByEmail(email: string) {
         id: true,
         password: true,
         displayName: true,
+        fullName: true,
         profileImage: true,
-        refreshToken: true,
         role: true,
       },
     });
