@@ -1,55 +1,53 @@
-import { ValidationError } from "@/lib/errors/ErrorClasses";
 import z from "zod";
+import { DBTokenMismatch, TokenExpiredError } from "../utils/ErrorClass";
 import {
-  DBTokenMismatch,
-  TokenExpiredError,
-  TokenUserNotExistsError,
-} from "../utils/ErrorClass";
-import {
-  findRefreshTokenById,
-  updateDBRefreshToken,
+  findRefreshTokenByUserAndDeviceId,
+  updateRefreshToken,
+  updateRefreshTokenOldToken,
 } from "./accessToken.repository";
-import { generateDualTokens } from "../utils/generateJWT";
+import { generateAccessToken } from "../utils/generateJWT";
+import generateRefreshTokenHash from "../utils/generateRefreshTokenHash";
+import validateSchema from "../utils/validateSchema";
 import decryptJWT from "../utils/decryptJWT";
 
-const isJwtSchema = z.jwt({
-  message: "Incorrect token is sent, not valid string value",
-});
-
-async function accessTokenService(refreshToken: string) {
-  const validation = isJwtSchema.safeParse(refreshToken);
-
-  if (!validation.success) {
-    throw new ValidationError(validation.error.issues);
-  }
+async function accessTokenService(
+  accessToken: string,
+  refreshToken: string,
+  deviceId: string,
+) {
+  validateSchema(z.jwt(), accessToken);
 
   const {
-    payload: { exp, sub, email, displayName, role },
-  } = await decryptJWT(refreshToken);
+    payload: { sub, email, displayName, role },
+  } = await decryptJWT(accessToken);
 
-  if (exp && exp > Date.now()) {
+  const findResult = await findRefreshTokenByUserAndDeviceId(sub, deviceId);
+
+  if (
+    findResult.expiresAt &&
+    Date.now() > findResult.expiresAt.getMilliseconds()
+  ) {
     throw new TokenExpiredError();
   }
 
-  const findResult = await findRefreshTokenById(sub);
-
-  if (!findResult) {
-    throw new TokenUserNotExistsError();
-  }
-
-  if (findResult.refreshToken !== refreshToken) {
+  if (findResult.token !== refreshToken) {
     throw new DBTokenMismatch();
   }
 
-  const tokens = await generateDualTokens({
+  await updateRefreshTokenOldToken(sub, deviceId, findResult.token);
+
+  const newAccessToken = await generateAccessToken({
     sub,
     email,
     displayName,
     role,
   });
-  await updateDBRefreshToken(sub, tokens.refreshToken);
 
-  return tokens;
+  const newRefreshToken = await generateRefreshTokenHash();
+
+  await updateRefreshToken(sub, deviceId, newRefreshToken);
+
+  return { accessToken: newAccessToken, refreshToken: newRefreshToken };
 }
 
 export default accessTokenService;

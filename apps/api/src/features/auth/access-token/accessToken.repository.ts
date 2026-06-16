@@ -1,41 +1,85 @@
 import prisma from "@/config/db";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
-import { UserNotFoundError } from "../utils/ErrorClass";
+import { TokenUserNotExistsError } from "../utils/ErrorClass";
 
-async function findRefreshTokenById(id: string) {
-  const token = await prisma.user.findUnique({
+async function findRefreshTokenByUserAndDeviceId(
+  userId: string,
+  deviceId: string,
+) {
+  const token = await prisma.refreshTokens.findUnique({
     where: {
-      id,
+      deviceId_userId: {
+        deviceId,
+        userId,
+      },
     },
     select: {
-      refreshToken: true,
+      expiresAt: true,
+      token: true,
     },
   });
 
   if (!token) {
-    throw new UserNotFoundError();
+    throw new TokenUserNotExistsError();
   }
 
   return token;
 }
 
-async function updateDBRefreshToken(id: string, refreshToken: string) {
+async function updateRefreshTokenOldToken(
+  userId: string,
+  deviceId: string,
+  oldRefreshToken: string,
+) {
   try {
-    return await prisma.user.update({
+    return await prisma.refreshTokens.update({
       where: {
-        id,
+        deviceId_userId: {
+          userId,
+          deviceId,
+        },
       },
       data: {
-        refreshToken,
+        oldToken: oldRefreshToken,
       },
     });
   } catch (err) {
     if (err instanceof PrismaClientKnownRequestError && err.code === "P2025") {
-      throw new UserNotFoundError();
+      throw new TokenUserNotExistsError();
     } else {
       throw err;
     }
   }
 }
 
-export { findRefreshTokenById, updateDBRefreshToken };
+async function updateRefreshToken(
+  userId: string,
+  deviceId: string,
+  refreshToken: string,
+) {
+  try {
+    return await prisma.refreshTokens.update({
+      where: {
+        deviceId_userId: {
+          userId,
+          deviceId,
+        },
+      },
+      data: {
+        token: refreshToken,
+      },
+    });
+  } catch (err) {
+    if (err instanceof PrismaClientKnownRequestError && err.code === "P2025") {
+      throw new TokenUserNotExistsError();
+    } else {
+      throw err;
+    }
+  }
+}
+
+export {
+  findRefreshTokenByUserAndDeviceId,
+  updateRefreshTokenOldToken,
+  updateRefreshToken,
+};

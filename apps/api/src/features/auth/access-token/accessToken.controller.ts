@@ -5,9 +5,10 @@ import ApiSuccessResponse from "@/utils/ApiSuccessResponse";
 
 async function accessTokenController(req: Request, res: Response) {
   const oldRefreshToken = req.signedCookies.session_cookie;
+  const { oldAccessToken, deviceId } = req.body;
 
   const { refreshToken: newRefreshToken, accessToken } =
-    await accessTokenService(oldRefreshToken);
+    await accessTokenService(oldAccessToken, oldRefreshToken, deviceId);
 
   res.clearCookie("session_cookie");
   res.cookie("session_cookie", newRefreshToken, setCookieConfig());
