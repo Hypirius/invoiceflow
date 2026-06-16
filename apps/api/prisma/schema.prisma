@@ -24,7 +24,7 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  refreshtokens  RefreshTokens[]
+  refreshTokens  RefreshTokens[]
   oauthProviders OauthProvider[]
   memberAt       OrganisationMembers[]
 
@@ -46,6 +46,7 @@ model RefreshTokens {
   updatedAt DateTime @updatedAt
 
   @@unique([token])
+  @@unique([deviceId, userId])
   @@index([userId])
   @@map("refresh_tokens")
 }
