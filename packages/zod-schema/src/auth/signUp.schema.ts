@@ -3,7 +3,11 @@ import z from "zod";
 const userSignUpPrimaryDetailsSchema = z
   .object({
     email: z.email().trim().toLowerCase(),
-    fullName: z.string().trim(),
+    fullName: z
+      .string()
+      .trim()
+      .min(4, { message: "Name must be greater than 4 characters" })
+      .max(32, { message: "Name must be less than 32 characters" }),
     password: z
       .string()
       .regex(/^.{8,}$/, "Password must be greater than 8 characters")
