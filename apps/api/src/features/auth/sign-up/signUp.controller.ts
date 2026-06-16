@@ -19,6 +19,7 @@ async function signUpController(req: Request, res: Response) {
     new ApiSuccessResponse("User successfully created", {
       ...data,
       accessToken,
+      deviceId: tokenDetails.deviceId,
     }),
   );
 }

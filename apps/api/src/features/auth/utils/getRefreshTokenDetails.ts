@@ -2,6 +2,7 @@ import { Request } from "express";
 import generateExpiryTime from "./generateExpiryTime";
 import config from "@/config/env";
 import generateRefreshTokenHash from "./generateRefreshTokenHash";
+import { randomUUID } from "crypto";
 
 async function getRefreshTokenDetails(
   req: Request,
@@ -14,7 +15,8 @@ async function getRefreshTokenDetails(
     token: await generateRefreshTokenHash(),
     ipAddress: req.ip || null,
     userAgent: req.headers["user-agent"] || null,
-    expiresAt: generateExpiryTime(config.JWT_ACCESS_EXPIRES_IN),
+    expiresAt: new Date(generateExpiryTime(config.JWT_ACCESS_EXPIRES_IN)),
+    deviceId: randomUUID(),
   };
 }
 

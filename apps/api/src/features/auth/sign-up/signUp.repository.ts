@@ -22,6 +22,7 @@ export type RefreshTokenType = {
   ipAddress: string | null;
   userAgent: string | null;
   userId: string;
+  deviceId: string;
 };
 
 function checkCreationError(err: unknown) {
