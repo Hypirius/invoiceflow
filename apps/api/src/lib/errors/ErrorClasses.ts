@@ -39,4 +39,21 @@ class EmailServiceError extends AppError {
   }
 }
 
-export { ForbiddenError, ValidationError, EmailServiceError };
+class InternalServerError extends AppError {
+  constructor() {
+    super(
+      globalErrorStates.INTERNAL_SERVER.message,
+      500,
+      globalErrorStates.INTERNAL_SERVER.code,
+      true,
+      "InternalServerError",
+    );
+  }
+}
+
+export {
+  ForbiddenError,
+  ValidationError,
+  EmailServiceError,
+  InternalServerError,
+};
