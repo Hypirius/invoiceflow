@@ -10,8 +10,8 @@ async function accessTokenController(req: Request, res: Response) {
   const { refreshToken: newRefreshToken, accessToken } =
     await accessTokenService(oldAccessToken, oldRefreshToken, deviceId);
 
-  res.clearCookie("session_cookie");
-  res.cookie("session_cookie", newRefreshToken, setCookieConfig());
+  res.clearCookie("refresh_token");
+  res.cookie("refresh_token", newRefreshToken, setCookieConfig());
 
   res.status(201).json(
     new ApiSuccessResponse("Access token is successfully generated", {

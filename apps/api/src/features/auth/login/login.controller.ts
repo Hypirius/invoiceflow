@@ -12,8 +12,8 @@ async function loginController(req: Request, res: Response) {
 
   await publishRefreshTokenService(tokenDetails);
 
-  res.clearCookie("session_token");
-  res.cookie("session_token", tokenDetails.token, setCookieConfig());
+  res.clearCookie("refresh_token");
+  res.cookie("refresh_token", tokenDetails.token, setCookieConfig());
 
   res.status(200).json(
     new ApiSuccessResponse("User has been logged in successfully.", {
