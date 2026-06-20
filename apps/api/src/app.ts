@@ -7,9 +7,8 @@ import allowedClients from "./middlewares/allowedclients.middleware";
 import setRequestIdHeader from "./middlewares/setReqIdHeader.middleware";
 import { httpLogger } from "./middlewares/httpLogger.middleware";
 import globalErrorMiddleware from "./middlewares/globalError.middleware";
-import authRouter from "./features/auth/auth.route";
 import cookieParser from "cookie-parser";
-import checkAuth from "./features/auth/checkAuth.middleware";
+import router from "./routes";
 
 const app: Express = express();
 
@@ -22,8 +21,7 @@ if (config.NODE_ENV === "production") {
 app.use(cors({ origin: config.WHITELIST_CLIENTS }));
 app.use(express.json());
 app.use(cookieParser(config.COOKIE_SECRET));
-app.use(checkAuth());
-app.use("/v1", authRouter);
+app.use("/v1", router);
 app.use(globalErrorMiddleware);
 
 export default app;
