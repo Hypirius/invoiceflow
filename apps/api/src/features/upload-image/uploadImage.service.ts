@@ -1,12 +1,21 @@
 import cloudinary from "@/config/cloudinary";
 import config from "@/config/env";
 import { SignatureFailedError } from "./ErrorClass";
+import validateSchema from "../auth/utils/validateSchema";
+import { uploadType, uploadTypeSchema } from "./uploadTypeSchema";
 
-function uploadImageService() {
+const presets = {
+  "profile-image": "profile_image_preset",
+  "organisation-logo": "organisation_logo_preset",
+  "invoice-pdf": "invoice_pdf_preset",
+};
+
+function uploadImageService(type: string) {
+  const result = validateSchema(uploadTypeSchema, type) as uploadType;
+
   const cloudinarySignReqParams = {
-    timestamp: Math.floor(new Date().getTime() / 1000), // Converted current time(ms) to seconds
-    folder: config.CLOUDINARY_UPLOAD_FOLDER,
-    tags: "profile-image",
+    timestamp: Math.floor(Date.now() / 1000), // Converted current time(ms) to seconds
+    upload_preset: presets[result],
   };
 
   const signature = cloudinary.utils.api_sign_request(
@@ -21,10 +30,8 @@ function uploadImageService() {
   return {
     signature,
     apiKey: config.CLOUDINARY_API_KEY,
-    cloudName: config.CLOUDINARY_CLOUD_NAME,
     ...cloudinarySignReqParams,
   };
 }
-// TODO: Is the signature generation in app or cloud? If cloud then wrapping it in promise might save performance by relieving the main thread
 
 export default uploadImageService;
