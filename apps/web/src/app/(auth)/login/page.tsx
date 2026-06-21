@@ -1,8 +1,8 @@
 import Divider from "@/components/shared/Divider";
 import GoogleOAuthButton from "@/features/auth/components/GoogleOAuthButton";
-import LoginForm from "@/features/auth/login/components/LoginForm";
 import AuthRedirect from "@/features/auth/components/AuthRedirect";
 import AuthPageHeader from "@/features/auth/components/AuthPageHeader";
+import LoginMain from "@/features/auth/login/components/LoginMain";
 
 export default function LoginMenu() {
   return (
@@ -13,7 +13,7 @@ export default function LoginMenu() {
       />
       <GoogleOAuthButton />
       <Divider text="or" />
-      <LoginForm />
+      <LoginMain />
       <AuthRedirect
         prompt="Don't have an account?"
         href="/sign-up"
