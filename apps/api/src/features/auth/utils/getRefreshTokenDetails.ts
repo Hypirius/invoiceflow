@@ -1,5 +1,5 @@
 import { Request } from "express";
-import generateExpiryTime from "./generateExpiryTime";
+import generateExpiryTime from "../../../utils/generateExpiryTime";
 import config from "@/config/env";
 import generateRefreshTokenHash from "./generateRefreshTokenHash";
 import { randomUUID } from "crypto";
