@@ -1,5 +1,5 @@
 import { userLoginDetailsSchema } from "@repo/zod-schema/auth/login.schema.js";
-import { userLoginDetailsType } from "@repo/zod-schema/auth/types/signUp.types.js";
+import { userLoginDetailsType } from "@repo/zod-schema/auth/types/login.types.ts";
 import findUserByEmail from "./login.repository";
 import { IncorrectDetailsError } from "../utils/ErrorClass";
 import { generateAccessToken } from "../utils/generateJWT";
