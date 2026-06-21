@@ -1,76 +1,80 @@
 "use client";
 
-import { useState } from "react";
 import InputWithLabelAndError from "@/components/shared/InputWIthLabelAndError";
 import Button from "@/components/ui/Button";
-import { loginDetailsSchema } from "../schema/loginDetailsSchema";
-import handleValidation from "../../utils/handleValidation";
-import {
-  LoginDetailsSchemaType,
-  LoginDetailsType,
-  TypedErrorTree,
-} from "../../types";
 import ForgotPassword from "./ForgotPassword";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { userLoginDetailsSchema } from "@repo/zod-schema/auth/login.schema.ts";
+import { userLoginDetailsType } from "@repo/zod-schema/auth/types/login.types.ts";
+import useLogin from "../hooks/useLogin";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import AuthSuccess from "../../components/AuthSuccess";
+import AuthRedirect from "../../components/AuthRedirect";
 
 export default function LoginForm() {
-  const [loginDetails, setLoginDetails] = useState<LoginDetailsType>({
-    email: "",
-    password: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<userLoginDetailsType>({
+    resolver: zodResolver(userLoginDetailsSchema),
   });
-  const [error, setError] =
-    useState<TypedErrorTree<LoginDetailsSchemaType> | null>(null);
 
-  function handleSubmit() {
-    const validationResult = handleValidation(loginDetailsSchema, loginDetails);
+  const { mutate, isPending, isSuccess } = useLogin();
 
-    if (!validationResult.success) {
-      setError(validationResult.errors);
-      return;
-    }
+  const router = useRouter();
+
+  function processSubmit(data: userLoginDetailsType) {
+    mutate(data);
   }
 
-  function updateDetails(details: LoginDetailsType) {
-    setError(null);
-    setLoginDetails(details);
+  useEffect(() => {
+    if (isSuccess) {
+      router.push("/user/dashboard");
+    }
+  }, [isSuccess, router]);
+
+  if (isPending) {
+    return <p>Authenicating...</p>;
+  }
+
+  if (isSuccess) {
+    return (
+      <AuthSuccess>
+        <h3>Successful login</h3>
+        <AuthRedirect
+          prompt="Redirect does not work? Go manually to"
+          href="/user/dashboard"
+          linkText="dashboard"
+        />
+      </AuthSuccess>
+    );
   }
 
   return (
     <form
       id="login-form"
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(processSubmit)}
       className="flex flex-col justify-center w-full"
     >
       <InputWithLabelAndError
         id="email"
         labelText="Email address"
         type="email"
-        value={loginDetails.email}
+        {...register("email")}
         required
-        onChange={(e) =>
-          updateDetails({
-            email: e.target.value,
-            password: loginDetails.password,
-          })
-        }
-        error={error?.properties?.email?.errors[0]}
-        className="w-full h-11"
+        error={errors?.email?.message}
         placeholder="name@example.com"
-        labelClassName=""
       />
       <InputWithLabelAndError
         id="password"
         labelText="Password"
         type="password"
-        value={loginDetails.password}
+        {...register("password")}
         required
-        onChange={(e) =>
-          updateDetails({
-            email: loginDetails.email,
-            password: e.target.value,
-          })
-        }
-        error={error?.properties?.password?.errors[0]}
-        className="w-full h-11"
+        error={errors?.password?.message}
       />
       <ForgotPassword />
       <Button variant="primary" type="submit" className="w-full">
