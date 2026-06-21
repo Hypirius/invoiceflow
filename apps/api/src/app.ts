@@ -18,7 +18,7 @@ app.use(httpLogger);
 if (config.NODE_ENV === "production") {
   app.use(allowedClients());
 }
-app.use(cors({ origin: config.WHITELIST_CLIENTS }));
+app.use(cors({ origin: config.WHITELIST_CLIENTS, credentials: true }));
 app.use(express.json());
 app.use(cookieParser(config.COOKIE_SECRET));
 app.use("/v1", router);
