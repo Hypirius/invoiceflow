@@ -13,7 +13,16 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    remotePatterns: [new URL("https://res.cloudinary.com/**")],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**", // Allows any HTTPS website
+      },
+      {
+        protocol: "http",
+        hostname: "**", // Optional: Allows any HTTP website
+      },
+    ],
   },
 };
 
