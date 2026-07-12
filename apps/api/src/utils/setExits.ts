@@ -1,5 +1,7 @@
 import { Server } from "http";
 import prisma from "../config/db";
+import { redisClient } from "@/config/redis";
+import invoiceRemainderWorker from "@/features/cron-jobs/recurring-invoice-remainder/reminderWorker";
 
 function setGracefulExits(server: Server) {
   process.on("uncaughtException", (err) => {
@@ -35,8 +37,15 @@ function setGracefulExits(server: Server) {
 }
 
 function handleExits(server: Server) {
-  server.close(() => console.log("Server is shutting down"));
-  prisma.$disconnect();
+  try {
+    server.close(() => console.log("Server is shutting down"));
+    prisma.$disconnect();
+    redisClient.quit();
+    // invoiceRemainderWorker.close();
+  } catch (err) {
+    console.log("An error occured when closing.", err);
+    process.kill(0);
+  }
   //   TODO: Add Logger support
 }
 
