@@ -84,11 +84,15 @@ model Address {
 }
 
 model Organisation {
-  id          Int    @id @default(autoincrement())
-  name        String
-  address     Int
-  phoneNumber String @map("phone_Int")
-  logoLink    String @map("logo_link")
+  id              Int     @id @default(autoincrement())
+  email           String
+  name            String
+  address         Int
+  phoneNumber     String  @map("phone_Int")
+  logoLink        String  @map("logo_link")
+  stripeAccountId String? @unique @map("stripe_account_id")
+  chargesEnabled  Boolean @default(false) @map("charges_enabled")
+  payoutsEnabled  Boolean @default(false) @map("payouts_enabled")
 
   organisationMembers OrganisationMembers[]
   organisationRoles   OrganisationRoles[]
