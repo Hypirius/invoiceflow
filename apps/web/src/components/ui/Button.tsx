@@ -4,6 +4,7 @@ import { cn } from "@/utils/cn";
 interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
   variant: "primary" | "inverted" | "secondary" | "outlined";
   children: ReactNode;
+  isDisabled?: boolean;
   className?: string;
 }
 
@@ -11,22 +12,25 @@ export default function Button({
   variant,
   children,
   className,
+  isDisabled,
   ...rest
 }: ButtonProps) {
   return (
     <button
       className={cn(
-        `h-10 w-80 cursor-pointer`,
+        `h-10 w-40 cursor-pointer rounded`,
         {
           "bg-[#3525CD] text-[#F8FAFC]": variant === "primary",
           "bg-[#0F172A] text-[#F8FAFC]": variant === "inverted",
           "bg-[#64748B] text-[#0F172A]": variant === "secondary",
           "bg-[#F8FAFC] text-[#0F172A] border-[#0F172A] border":
             variant === "outlined",
+          "opacity-80 disabled bg-[#F8FAFC] text-[#0F172A]": isDisabled,
         },
         className,
       )}
       {...rest}
+      disabled={isDisabled}
     >
       {children}
     </button>
