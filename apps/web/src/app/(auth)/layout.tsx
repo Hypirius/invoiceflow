@@ -1,6 +1,6 @@
 import AuthShowcase from "../../features/auth/components/AuthShowcase";
 import AuthMain from "../../features/auth/components/AuthMain";
-import { NextJSLayout } from "../../types/nextjs-layout";
+import { NextJSLayout } from "../../types/Nextjs-layout";
 
 export default function AuthLayout({ children }: NextJSLayout) {
   return (
