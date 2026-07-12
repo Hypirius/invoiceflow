@@ -1,19 +1,19 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import changeDetailsService from "./changeDetails.service";
-import ApiSuccessResponse from "@/utils/ApiSuccessResponse";
 import readJwtPayload from "@/utils/readJwtPayload";
+import setCookies from "../utils/setCookies";
+import publishRefreshTokenService from "../publish-refresh-token/publishRefreshToken.service";
 
-async function changeDetailsController(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
-  const tokenPayload = readJwtPayload(req.headers);
-  const result = await changeDetailsService(req.body, tokenPayload.sub);
+async function changeDetailsController(req: Request, res: Response) {
+  const { sub } = readJwtPayload(req.headers);
 
-  res
-    .status(200)
-    .json(new ApiSuccessResponse("Successfully changed user details", result));
+  const accessToken = await changeDetailsService(req.body, sub);
+
+  const { token, deviceId } = await publishRefreshTokenService(req, sub);
+
+  setCookies(res, accessToken, token, deviceId);
+
+  res.status(204).end();
 }
 
 export default changeDetailsController;

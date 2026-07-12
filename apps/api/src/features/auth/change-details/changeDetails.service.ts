@@ -1,50 +1,52 @@
-import { userSignUpDetailsSchema } from "@repo/zod-schema/auth/signUp.schema.js";
-import { changeDetailsType } from "../types";
+import { ChangeUserDetailsType } from "@repo/zod-schema/change-details/types/changeDetails.types.ts";
 import validateSchema from "../utils/validateSchema";
 import compareHash from "../utils/compareHash";
 import { findUserDetails, updateDetails } from "./changeDetails.repository";
 import { PasswordHashMismatchError } from "../utils/ErrorClass";
 import hashify from "../utils/hashify";
-import { generateDualTokens } from "../utils/generateJWT";
+import { generateAccessToken } from "../utils/generateJWT";
+import { changeUserDetailsSchema } from "@repo/zod-schema/change-details/changeDetails.schema.ts";
 
 async function changeDetailsService(
-  changedDetails: changeDetailsType,
+  changedDetails: ChangeUserDetailsType,
   userId: string,
 ) {
-  validateSchema<changeDetailsType>(
-    userSignUpDetailsSchema.partial(),
+  console.log(changeDetailsService);
+  const validationResult = validateSchema<ChangeUserDetailsType>(
+    changeUserDetailsSchema,
     changedDetails,
   );
 
-  const { email, displayName, role, password } = await findUserDetails(userId);
+  const { email, displayName, fullName, role, password } =
+    await findUserDetails(userId);
 
-  if (changedDetails.password) {
-    const isSameHash = compareHash(changedDetails.password, password);
+  if (validationResult.passwordDetails) {
+    const isSameHash = await compareHash(
+      validationResult.passwordDetails.currentPassword,
+      password,
+    );
 
     if (!isSameHash) {
       throw new PasswordHashMismatchError();
     }
 
-    changedDetails.password = await hashify(changedDetails.password);
+    validationResult.passwordDetails.newPassword = await hashify(
+      validationResult.passwordDetails.newPassword,
+    );
   }
 
-  const { accessToken, refreshToken } = await generateDualTokens({
+  await updateDetails(validationResult, userId);
+
+  const accessToken = await generateAccessToken({
     sub: userId,
-    email,
-    displayName,
+    email: validationResult.email ?? email,
+    displayName: displayName ?? fullName,
     role,
-    ...changedDetails,
   });
 
-  const payload = { ...changedDetails, refreshToken };
-
-  await updateDetails(userId, payload);
-
-  return {
-    updatedAccessToken: accessToken,
-  };
+  return accessToken;
 }
 
-// TODO: Check the token payload items in res
+// TODO: Email verification can be used here for password
 
 export default changeDetailsService;
