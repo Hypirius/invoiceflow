@@ -21,7 +21,6 @@ export default function SecondaryForm({
     handleSubmit,
     setValue,
     setError,
-    watch,
     formState: { errors },
   } = useForm<userSignUpSecondaryDetailsType>({
     resolver: zodResolver(userSignUpSecondaryDetailsSchema),
@@ -41,12 +40,7 @@ export default function SecondaryForm({
         placeholder={fullName}
         error={errors.displayName?.message}
       />
-      <ProfileImageUpload
-        setValue={setValue}
-        setError={setError}
-        src={watch("profileImage")}
-        error={errors.profileImage?.message}
-      />
+      <ProfileImageUpload setValue={setValue} setError={setError} />
     </form>
   );
 }

@@ -9,10 +9,11 @@ import {
 import { userSignUpSecondaryDetailsType } from "@repo/zod-schema/auth/types/signUp.types.ts";
 import SecondaryForm from "./SecondaryForm";
 import PrimaryForm from "./PrimaryForm";
-import useSignUp from "../hooks/useSignUp";
 import { useRouter } from "next/navigation";
 import SignUpSuccess from "./SignUpSuccess";
 import FormController from "./FormController";
+import usePost from "@/hooks/usePost";
+import fetchUrls from "@/config/fetchUrls";
 
 type selectedFormType = {
   step: 1 | 2;
@@ -35,7 +36,11 @@ export default function SignUpMain() {
     formId: "primary-form",
   });
 
-  const { mutate, isSuccess, isPending } = useSignUp();
+  const { mutate, isSuccess, isPending } = usePost<FullDetailsType>({
+    url: fetchUrls.signUp,
+    key: "userSignUp",
+    credentials: true,
+  });
 
   const router = useRouter();
 

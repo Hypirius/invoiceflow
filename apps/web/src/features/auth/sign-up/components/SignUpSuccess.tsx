@@ -4,7 +4,7 @@ import AuthSuccess from "../../components/AuthSuccess";
 function SignUpSuccess() {
   return (
     <AuthSuccess>
-      <h3 className="text-[24px] font-bold">Succesful!</h3>
+      <h3 className="text-[24px] font-bold">Success!</h3>
       <p>User successfully authenicated, redirecting to dashboard...</p>
       <AuthRedirect
         prompt="Not redirected? Please move manually to"

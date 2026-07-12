@@ -7,11 +7,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userLoginDetailsSchema } from "@repo/zod-schema/auth/login.schema.ts";
 import { userLoginDetailsType } from "@repo/zod-schema/auth/types/login.types.ts";
-import useLogin from "../hooks/useLogin";
+
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import AuthSuccess from "../../components/AuthSuccess";
 import AuthRedirect from "../../components/AuthRedirect";
+import ErrorMessage from "@/components/shared/UserMessages/ErrorMessage";
+import fetchUrls from "@/config/fetchUrls";
+import usePost from "@/hooks/usePost";
 
 export default function LoginForm() {
   const {
@@ -22,13 +25,15 @@ export default function LoginForm() {
     resolver: zodResolver(userLoginDetailsSchema),
   });
 
-  const { mutate, isPending, isSuccess } = useLogin();
+  const { mutate, isPending, isSuccess, error } = usePost<userLoginDetailsType>(
+    {
+      url: fetchUrls.login,
+      key: "userLogin",
+      credentials: true,
+    },
+  );
 
   const router = useRouter();
-
-  function processSubmit(data: userLoginDetailsType) {
-    mutate(data);
-  }
 
   useEffect(() => {
     if (isSuccess) {
@@ -56,9 +61,10 @@ export default function LoginForm() {
   return (
     <form
       id="login-form"
-      onSubmit={handleSubmit(processSubmit)}
+      onSubmit={handleSubmit((data) => mutate(data))}
       className="flex flex-col justify-center w-full"
     >
+      {error && <ErrorMessage>{error.message}</ErrorMessage>}
       <InputWithLabelAndError
         id="email"
         labelText="Email address"
@@ -77,7 +83,12 @@ export default function LoginForm() {
         error={errors?.password?.message}
       />
       <ForgotPassword />
-      <Button variant="primary" type="submit" className="w-full">
+      <Button
+        variant="primary"
+        type="submit"
+        className="w-full"
+        isDisabled={isPending}
+      >
         Sign in &gt;
       </Button>
     </form>

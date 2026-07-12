@@ -9,15 +9,9 @@ type ProfileImageUploadProps = {
   setValue: UseFormSetValue<userSignUpSecondaryDetailsType>;
   setError: UseFormSetError<userSignUpSecondaryDetailsType>;
   src?: string;
-  error: string | undefined;
 };
 
-function ProfileImageUpload({
-  setValue,
-  setError,
-  src,
-  error,
-}: ProfileImageUploadProps) {
+function ProfileImageUpload({ setValue, setError }: ProfileImageUploadProps) {
   const key = "profileImage";
 
   function setSecondaryFormValue(data: string) {
@@ -31,9 +25,8 @@ function ProfileImageUpload({
   return (
     <ImageFileUpload
       itemKey={key}
+      labelText="Enter Image(optional)"
       uploadType="profile-image"
-      src={src}
-      error={error}
       defaultImage={DefaultUserProfileImage}
       SuccessCb={setSecondaryFormValue}
       ErrorCb={setErrorFormValue}

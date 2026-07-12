@@ -1,15 +1,13 @@
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import SignUpMain from "./SignUpMain";
-
-const queryClient = new QueryClient();
+import QueryClientWrapper from "@/components/shared/QueryClientWrapper";
 
 function SignUp() {
   return (
-    <QueryClientProvider client={queryClient}>
+    <QueryClientWrapper>
       <SignUpMain />
-    </QueryClientProvider>
+    </QueryClientWrapper>
   );
 }
 
