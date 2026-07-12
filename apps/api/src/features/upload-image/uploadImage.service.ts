@@ -2,7 +2,7 @@ import cloudinary from "@/config/cloudinary";
 import config from "@/config/env";
 import { SignatureFailedError } from "./ErrorClass";
 import validateSchema from "../auth/utils/validateSchema";
-import { uploadType, uploadTypeSchema } from "./uploadTypeSchema";
+import { uploadType, uploadTypeSchema } from "./uploadType.schema";
 
 const presets = {
   "profile-image": "profile_image_preset",
