@@ -1,22 +1,35 @@
-import { Request } from "express";
-import generateExpiryTime from "../../../utils/generateExpiryTime";
-import config from "@/config/env";
+import { cookieConfig } from "@repo/shared/constants/cookieConfig.js";
 import generateRefreshTokenHash from "./generateRefreshTokenHash";
 import { randomUUID } from "crypto";
 
-async function getRefreshTokenDetails(
-  req: Request,
-  userId: string,
-  oldToken: string | null = null,
-) {
+type getRefreshTokenDetailsType = {
+  userId: string;
+  deviceId?: string;
+  ip?: string | null;
+  userAgent?: string | null;
+  oldTokenDetails?: {
+    oldToken: string;
+    oldExpiresAt: Date;
+  };
+};
+
+async function getRefreshTokenDetails({
+  userId,
+  deviceId,
+  ip = null,
+  userAgent = null,
+  oldTokenDetails,
+}: getRefreshTokenDetailsType) {
   return {
-    oldToken,
+    oldToken: oldTokenDetails?.oldToken || null,
     userId,
     token: await generateRefreshTokenHash(),
-    ipAddress: req.ip || null,
-    userAgent: req.headers["user-agent"] || null,
-    expiresAt: new Date(generateExpiryTime(config.JWT_ACCESS_EXPIRES_IN)),
-    deviceId: randomUUID(),
+    ipAddress: ip,
+    userAgent,
+    expiresAt:
+      oldTokenDetails?.oldExpiresAt ||
+      new Date(Date.now() + cookieConfig.refresh_token.maxAge),
+    deviceId: (deviceId as string) ?? randomUUID(),
   };
 }
 

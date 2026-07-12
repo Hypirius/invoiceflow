@@ -1,4 +1,3 @@
-import { userSignUpDetailsType } from "@repo/zod-schema/auth/types/signUp.types.js";
 import { JWTPayload } from "jose";
 
 interface JwtPayloadType extends JWTPayload {
@@ -6,7 +5,6 @@ interface JwtPayloadType extends JWTPayload {
   email: string;
   displayName: string;
   role: string;
-  typ?: "refresh";
 }
 
 type EmailRedisPayload = {
@@ -40,8 +38,6 @@ type GoogleIdTokenPayloadType = {
   nbf?: number; // Not-before Unix timestamp in seconds
   at_hash?: string; // Access token hash value
 };
-
-export type changeDetailsType = Partial<userSignUpDetailsType>;
 
 export type { JwtPayloadType, EmailRedisPayload, GoogleIdTokenPayloadType };
 

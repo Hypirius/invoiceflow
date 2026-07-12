@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import googleOauthCallbackService from "./googleOauthCallback.service";
-import publishRefreshTokenService from "@/features/auth/sign-up/publishRefreshToken.service";
+import publishRefreshTokenService from "@/features/auth/publish-refresh-token/publishRefreshToken.service";
 import getRefreshTokenDetails from "@/features/auth/utils/getRefreshTokenDetails";
 import setCookieConfig from "@/features/auth/utils/setCookieConfig";
 import ApiSuccessResponse from "@/utils/ApiSuccessResponse";

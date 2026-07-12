@@ -1,14 +1,22 @@
 import convertTimeValue from "@/utils/convertTimeValue";
-import ms from "ms";
 import config from "@/config/env";
 import { CookieOptions } from "express";
+import { cookieConfig } from "@repo/shared/constants/cookieConfig.ts";
 
-function setCookieConfig(): CookieOptions {
-  return {
-    signed: true,
-    httpOnly: true,
-    maxAge: convertTimeValue(config.JWT_REFRESH_EXPIRES_IN as ms.StringValue),
+type cookieType = "refresh_token" | "access_token" | "device_id";
+
+function setCookieConfig(type: cookieType): CookieOptions {
+  const options: CookieOptions = {
+    httpOnly:
+      type === "refresh_token" ? cookieConfig.refresh_token.httpOnly : false,
+    maxAge: cookieConfig[type].maxAge,
   };
+
+  if (config.NODE_ENV === "production") {
+    options.secure = true;
+  }
+
+  return options;
 }
 
 export default setCookieConfig;

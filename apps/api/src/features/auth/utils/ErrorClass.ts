@@ -194,6 +194,18 @@ class OtpNotExistsError extends AppError {
   }
 }
 
+class OldTokenDetectedError extends AppError {
+  constructor() {
+    super(
+      "Old refresh token is detected. You have been outsmarted, all tokens are now expired",
+      403,
+      "ERR_OLD_TOKEN_DETECTED",
+      true,
+      "OldTokenDetectedError",
+    );
+  }
+}
+
 export {
   UserExistsError,
   IncorrectDetailsError,
@@ -211,6 +223,7 @@ export {
   StateMismatchError,
   OauthProviderError,
   OtpNotExistsError,
+  OldTokenDetectedError,
 };
 
 //TODO: CHECK ALL STATUS CODE AND CHANGE THE ERROR STATES TO A SEPARATE OBJECT

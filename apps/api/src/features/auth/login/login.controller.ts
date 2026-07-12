@@ -1,24 +1,19 @@
 import { Request, Response } from "express";
 import loginService from "./login.service";
 import ApiSuccessResponse from "@/utils/ApiSuccessResponse";
-import setCookieConfig from "../utils/setCookieConfig";
-import publishRefreshTokenService from "../sign-up/publishRefreshToken.service";
-import getRefreshTokenDetails from "../utils/getRefreshTokenDetails";
+import publishRefreshTokenService from "../publish-refresh-token/publishRefreshToken.service";
+import setCookies from "../utils/setCookies";
 
 async function loginController(req: Request, res: Response) {
   const { data, accessToken, userId } = await loginService(req.body);
 
-  const tokenDetails = await getRefreshTokenDetails(req, userId);
+  const { token, deviceId } = await publishRefreshTokenService(req, userId);
 
-  await publishRefreshTokenService(tokenDetails);
-
-  res.clearCookie("refresh_token");
-  res.cookie("refresh_token", tokenDetails.token, setCookieConfig());
+  setCookies(res, accessToken, token, deviceId);
 
   res.status(200).json(
     new ApiSuccessResponse("User has been logged in successfully.", {
       ...data,
-      accessToken: accessToken,
     }),
   );
 }
