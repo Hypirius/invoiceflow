@@ -34,6 +34,8 @@ const configSchema = z.object({
   GOOGLE_OAUTH_ID: z.string(),
   GOOGLE_OAUTH_SECRET_KEY: z.string(),
   OAUTH_REDIRECT_URL: z.url(),
+  STRIPE_SECRET_KEY: z.string(),
+  STRIPE_WEBHOOK_CONNECT_SECRET: z.string(),
 });
 
 const config = configSchema.parse({
@@ -58,6 +60,8 @@ const config = configSchema.parse({
   GOOGLE_OAUTH_ID: process.env.GOOGLE_OAUTH_ID,
   GOOGLE_OAUTH_SECRET_KEY: process.env.GOOGLE_OAUTH_SECRET_KEY,
   OAUTH_REDIRECT_URL: process.env.OAUTH_REDIRECT_URL,
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+  STRIPE_WEBHOOK_CONNECT_SECRET: process.env.STRIPE_WEBHOOK_CONNECT_SECRET,
 });
 export default config;
 
