@@ -1,21 +1,27 @@
 import { Request, Response } from "express";
-import accessTokenService from "./accessToken,service";
-import setCookieConfig from "../utils/setCookieConfig";
+import accessTokenService from "./accessToken.service";
+import publishRefreshTokenService from "../publish-refresh-token/publishRefreshToken.service";
 import ApiSuccessResponse from "@/utils/ApiSuccessResponse";
 
 async function accessTokenController(req: Request, res: Response) {
-  const oldRefreshToken = req.signedCookies.session_cookie;
-  const { oldAccessToken, deviceId } = req.body;
+  const {
+    newAccessToken,
+    refreshTokenDetails: { oldRefreshToken, oldExpiresAt },
+    userId,
+  } = await accessTokenService(req.body);
 
-  const { refreshToken: newRefreshToken, accessToken } =
-    await accessTokenService(oldAccessToken, oldRefreshToken, deviceId);
+  const { token } = await publishRefreshTokenService(req, userId, {
+    oldToken: oldRefreshToken,
+    oldExpiresAt,
+  });
 
-  res.clearCookie("refresh_token");
-  res.cookie("refresh_token", newRefreshToken, setCookieConfig());
-
-  res.status(201).json(
-    new ApiSuccessResponse("Access token is successfully generated", {
-      accessToken,
+  return res.status(201).json(
+    new ApiSuccessResponse("Successfully refreshed tokens", {
+      newAccessToken,
+      refreshTokenDetails: {
+        token,
+        maxAge: (oldExpiresAt.getTime() - Date.now()) / 1000,
+      },
     }),
   );
 }

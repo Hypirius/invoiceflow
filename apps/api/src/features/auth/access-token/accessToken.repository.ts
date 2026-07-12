@@ -1,85 +1,40 @@
 import prisma from "@/config/db";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { TokenUserNotExistsError } from "../utils/ErrorClass";
 
-async function findRefreshTokenByUserAndDeviceId(
-  userId: string,
-  deviceId: string,
-) {
-  const token = await prisma.refreshTokens.findUnique({
+async function findDetailsByRefreshToken(refreshToken: string) {
+  const tokenDetails = await prisma.refreshTokens.findUnique({
     where: {
-      deviceId_userId: {
-        deviceId,
-        userId,
-      },
+      token: refreshToken,
     },
     select: {
       expiresAt: true,
       token: true,
+      oldToken: true,
+      user: {
+        select: {
+          id: true,
+          email: true,
+          fullName: true,
+          displayName: true,
+          role: true,
+        },
+      },
     },
   });
 
-  if (!token) {
+  if (!tokenDetails) {
     throw new TokenUserNotExistsError();
   }
 
-  return token;
+  return tokenDetails;
 }
 
-async function updateRefreshTokenOldToken(
-  userId: string,
-  deviceId: string,
-  oldRefreshToken: string,
-) {
-  try {
-    return await prisma.refreshTokens.update({
-      where: {
-        deviceId_userId: {
-          userId,
-          deviceId,
-        },
-      },
-      data: {
-        oldToken: oldRefreshToken,
-      },
-    });
-  } catch (err) {
-    if (err instanceof PrismaClientKnownRequestError && err.code === "P2025") {
-      throw new TokenUserNotExistsError();
-    } else {
-      throw err;
-    }
-  }
+async function invalidateAllUserRefreshTokens(id: string) {
+  await prisma.refreshTokens.deleteMany({
+    where: {
+      userId: id,
+    },
+  });
 }
 
-async function updateRefreshToken(
-  userId: string,
-  deviceId: string,
-  refreshToken: string,
-) {
-  try {
-    return await prisma.refreshTokens.update({
-      where: {
-        deviceId_userId: {
-          userId,
-          deviceId,
-        },
-      },
-      data: {
-        token: refreshToken,
-      },
-    });
-  } catch (err) {
-    if (err instanceof PrismaClientKnownRequestError && err.code === "P2025") {
-      throw new TokenUserNotExistsError();
-    } else {
-      throw err;
-    }
-  }
-}
-
-export {
-  findRefreshTokenByUserAndDeviceId,
-  updateRefreshTokenOldToken,
-  updateRefreshToken,
-};
+export { findDetailsByRefreshToken, invalidateAllUserRefreshTokens };
